@@ -7,24 +7,38 @@ NAME1 = bot
 EXEC1 = $(NAME1).exe
 OBJS1 = $(addprefix $(OBJDIR)/, $(NAME1).o)
 SRC1 = $(addprefix $(SRCDIR)/, $(NAME1).cpp)
-#HEADS1 = 
-
-CFLAGS = -std=c++11 -Wall
-LFLAGS = -std=c++11 -Wall
-LDLIBS = 
-CO = g++
-LD = $(CO)
 
 ifeq ($(OS),Windows_NT)
+	NAME2 = http_windows
+	OBJS2 = $(addprefix $(OBJDIR)/, $(NAME2).o)
+	SRC2 = $(addprefix $(SRCDIR)/http_client/, $(NAME2).cpp)
+	HEADS2 = $(addprefix $(SRCDIR)/http_client/, $(NAME2).hpp)
+
+	LDLIBS = -lwinhttp
     RM = del /Q /S
 else
+	NAME2 = http_unix
+	OBJS2 = $(addprefix $(OBJDIR)/, $(NAME2).o)
+	SRC2 = $(addprefix $(SRCDIR)/http_client/, $(NAME2).cpp)
+	HEADS2 = $(addprefix $(SRCDIR)/http_client/, $(NAME2).hpp)
+
+	LDLIBS = -lcurl
     RM = rm -f
 endif
 
-$(OBJS1): $(SRC1) #$(HEADS1)
+CFLAGS = -std=c++11 -Wall
+LFLAGS = -std=c++11 -Wall
+
+CO = g++
+LD = $(CO)
+
+$(OBJS1): $(SRC1)
 	$(CO) $(CFLAGS) -c $< -o $@
-$(EXEC1): $(OBJS1)
-	$(LD) -o $@ $(LFLAGS) $^ $(LDLIBS)
+$(OBJS2): $(SRC2) $(HEADS2)
+	$(CO) $(CFLAGS) -c $< -o $@
+
+$(EXEC1): $(OBJS1) $(OBJS2)
+		$(LD) -o $@ $(LFLAGS) $^ $(LDLIBS)
 
 .PHONY: all
 all: $(EXEC1)
