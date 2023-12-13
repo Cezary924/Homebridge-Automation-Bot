@@ -1,8 +1,4 @@
-# Compiled Object files
-*.o
-*.obj
-
-# Executables
-*.exe
-*.out
-*.app
+# Ignore secret files containing tokens, keys, etc.
+/src/__pycache__/
+/config/
+/log/
