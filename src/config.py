@@ -7,13 +7,8 @@ def check_file(path: str) -> bool:
 # create configuration file
 def create_config(path: str, start_time: str, log_length: int) -> None:
     with open(path, 'w') as f:
-        f.write('')
-    line = "|" + "=" * (log_length - 2) + "|"
-    text = line + "\n A config file has been created successfully.\n Please, edit the configuration and run the script again.\n" + line
-    print('\r', end = '')
-    print(text)
-    with open('../log/log_' + start_time + '.log', 'w') as f:
-        f.write(text)
+        json.dump({"settings": {"ip": "XXX.XXX.XXX.XXX", "port": "XXXX", "login": "XXXXXX", "password": "XXXXXX"}}, f, indent = 4)
+    print_config_info("A config file has been created successfully.", "Please, edit the configuration and run the script again.", start_time, log_length)
 
 # load configuartion from file
 def load_config(path: str) -> dict:
