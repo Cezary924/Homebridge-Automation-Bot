@@ -25,16 +25,20 @@ def save_config(path: str, config_dict: dict) -> None:
     with open(path, 'w') as f:
         json.dump(config_dict, f)
 
-# print info about error during preparing configuration
-def print_config_err(e: Exception, start_time: str, log_length: int, info: str = ""):
+# print info about loading configuration process
+def print_config_info(info: str, info2: str, start_time: str, log_length: int, info3: str = ""):
     line = "|" + "=" * (log_length - 2) + "|"
     small_line = " " + "-" * (log_length - 2) + " "
-    text = line + "\n An error has occured while loading the config file.\n" + small_line + "\n - '" + str(e) + "'\n"
-    if info == "":
+    text = line + "\n " + info + "\n" + small_line + "\n - '" + info2 + "'\n"
+    if info3 == "":
         text = text + line
     else:
-        text = text + "\n - '" + info + "'\n" + line
+        text = text + "\n - '" + info3 + "'\n" + line
     print('\r', end = '')
     print(text)
     with open('../log/log_' + start_time + '.log', 'w') as f:
         f.write(text)
+
+# print info about error during preparing configuration
+def print_config_err(e: Exception, start_time: str, log_length: int, info: str = ""):
+    print_config_info("An error has occured while loading the config file.", str(e), start_time, log_length, info)
