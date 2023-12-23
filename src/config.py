@@ -13,7 +13,13 @@ def create_config(path: str, start_time: str, log_length: int) -> None:
 # load configuartion from file
 def load_config(path: str) -> dict:
     with open(path, 'r') as f:
-        return json.load(f)
+        loaded_config = json.load(f)
+    if 'settings' not in loaded_config.keys():
+        pass
+    all_elements_in_dict = all(element in loaded_config['settings'] for element in ['ip', 'port', 'login', 'password'])
+    if not all_elements_in_dict:
+        pass
+    return loaded_config
 
 # save configuartion to file
 def save_config(path: str, config_dict: dict) -> None:
@@ -21,7 +27,7 @@ def save_config(path: str, config_dict: dict) -> None:
         json.dump(config_dict, f)
 
 # print info about loading configuration process
-def print_config_info(info: str, info2: str, start_time: str, log_length: int, info3: str = ""):
+def print_config_info(info: str, info2: str, start_time: str, log_length: int, info3: str = "") -> None:
     line = "|" + "=" * (log_length - 2) + "|"
     small_line = " " + "-" * (log_length - 2) + " "
     text = line + "\n " + info + "\n" + small_line + "\n - '" + info2 + "'\n"
@@ -29,11 +35,10 @@ def print_config_info(info: str, info2: str, start_time: str, log_length: int, i
         text = text + line
     else:
         text = text + "\n - '" + info3 + "'\n" + line
-    print('\r', end = '')
     print(text)
     with open('../log/log_' + start_time + '.log', 'w') as f:
         f.write(text)
 
 # print info about error during preparing configuration
-def print_config_err(e: Exception, start_time: str, log_length: int, info: str = ""):
+def print_config_err(e: Exception, start_time: str, log_length: int, info: str = "") -> None:
     print_config_info("An error has occured while loading the config file.", str(e), start_time, log_length, info)
