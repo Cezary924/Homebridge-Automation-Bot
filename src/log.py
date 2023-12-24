@@ -1,4 +1,4 @@
-import sys, io, time, datetime, threading
+import sys, io, datetime, threading
 
 # get start date & time
 start_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -39,34 +39,9 @@ class Logger(object):
     def flush(self) -> None:
         pass
 
-# class defining LoadingString objects
-class LoadingString():
-    def __init__(self) -> None:
-        self._dots = 0
-        self._stop = False
-        print('|' + 'Loading'.center(log_length - 2, ' ') + '|', end = '\r')
-    def __str__(self) -> str:
-        if self._dots >= 4:
-            self._dots = 0
-        text = 'Loading'.center(log_length - 2, ' ')
-        text_split = text.split('Loading')
-        if self._dots > 0:
-            text = '|' + text_split[0] + 'Loading' + '.' * self._dots + text_split[1][:-self._dots] + '|'
-        else:
-            text = '|' + text_split[0] + 'Loading' + text_split[1] + '|'
-        self._dots = self._dots + 1
-        return text
-    def run(self) -> None:
-        while self._stop == False:
-            print(self, end = '\r')
-            time.sleep(0.5)
-    def stop(self) -> None:
-        self._stop = True
-
 # print info about Bot's tasks
 def print_log(info: str, info2: str = "", start_stop: int = 0) -> None:
     if start_stop == 1:
-        print('\r', end = '')
         print("|" + "=" * (log_length - 2) + "|")
         print("|" + "+" * (log_length - 2) + "|")
         print("Homebridge Automation Bot".center(log_length, ' '))
