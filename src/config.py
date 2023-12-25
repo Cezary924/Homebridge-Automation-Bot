@@ -27,5 +27,5 @@ def save_config(path: str, config_dict: dict) -> None:
         json.dump(config_dict, f, indent = 4)
 
 # print info about error during preparing configuration
-def print_config_err(e: Exception, start_time: str, log_length: int, info: str = "") -> None:
-    print_config_info("An error has occured while loading the config file.", str(e), start_time, log_length, info)
+def print_err(e: Exception) -> None:
+    log.print_log("An error has occured while loading the config file.", str(e))
