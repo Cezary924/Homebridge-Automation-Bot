@@ -1,4 +1,5 @@
 import json, os
+import log, hb
 
 # check if configuration file exists
 def check_file(path: str) -> bool:
@@ -15,10 +16,36 @@ def load_config(path: str) -> dict:
     with open(path, 'r') as f:
         loaded_config = json.load(f)
     if 'settings' not in loaded_config.keys():
-        pass
-    all_elements_in_dict = all(element in loaded_config['settings'] for element in ['ip', 'port', 'login', 'password'])
-    if not all_elements_in_dict:
-        pass
+        raise Exception("A 'settings' dict missing in config file.")
+    for element in ['ip', 'port', 'username', 'password']:
+        if element not in loaded_config['settings'].keys():
+            raise Exception("A '" + element + "' missing in 'settings' dict in config file.")
+    if 'accessories' not in loaded_config.keys():
+        try:
+            hb.get_access_token(loaded_config)
+            accessories_layout = hb.get_accessories_layout()
+            hidden_accessories = {}
+            for room in accessories_layout:
+                for service in room['services']:
+                    if 'hidden' in service:
+                        hidden_accessories["uniqueId"] = True
+                    else:
+                        hidden_accessories["uniqueId"] = False
+            accessories = hb.get_accessories()
+            for accessory in accessories:
+                if accessory["uniqueId"] in hidden_accessories:
+                    if hidden_accessories[accessory["uniqueId"]] == True:
+                        del accessory
+                        continue
+                unwanted = set(accessory.keys()) - set(["uniqueId", "serviceName"])
+                for unwanted_key in unwanted:
+                    del accessory[unwanted_key]
+            loaded_config['accessories'] = accessories
+            save_config(path, loaded_config)
+            log.print_log("A config file has been updated with accessories list.", "Please, edit the updated configuration and run the script again.")
+        except Exception as e:
+            raise Exception(str(e))
+        raise Exception('')
     return loaded_config
 
 # save configuartion to file
@@ -27,5 +54,5 @@ def save_config(path: str, config_dict: dict) -> None:
         json.dump(config_dict, f, indent = 4)
 
 # print info about error during preparing configuration
-def print_config_err(e: Exception, start_time: str, log_length: int, info: str = "") -> None:
-    print_config_info("An error has occured while loading the config file.", str(e), start_time, log_length, info)
+def print_err(e: Exception) -> None:
+    log.print_log("An error has occured while loading the config file.", str(e))
