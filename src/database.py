@@ -1,53 +1,34 @@
-import sqlite3, threading, os
+import threading
+from datetime import datetime, timedelta
 
-path = "../config/database.db"
-
-db_conn = None
-cursor = None
-database_lock = None
-
-# create database of Homebridge accessories and its current state
-def create_database() -> None:
-    global path, db_conn, cursor, database_lock
-
-    # check if there is not any database file from previous script run
-    if os.path.isfile(path):
-        os.remove(path)
-
-    # connect to accessories database
-    db_conn = sqlite3.connect(path, check_same_thread = False)
-
-    # create cursor
-    cursor = db_conn.cursor()
-
-    # create lock object
-    database_lock = threading.Lock()
-
-    # create Accessories table
-    database_lock.acquire(True)
-    cursor.execute("""
-        create table if not exists Accessories (
-            uniqueId text primary key,
-            serviceName text,
-            currentState text,
-            lastModified text
-            ); """)
-    database_lock.release()
-
-# commit changes, close connection with database and delete file
-def remove_database() -> None:
-    global database_lock, db_conn, path
+class Database:
+    def __init__(self):
+        self.data = {}
+        self.lock = threading.Lock()
     
-    database_lock.acquire(True)
-    db_conn.commit()
-    db_conn.close()
-    database_lock.release()
-
-    os.remove(path)
-
-
-
-#database_lock.acquire(True)
-#cursor.execute("UPDATE Reminder SET notified = ? WHERE rowid = ?;", (notified, id))
-#db_conn.commit()
-#database_lock.release()
+    def add(self, key: str, status: int) -> None:
+        with self.lock:
+            self.data[key] = {'status': status, 'date': datetime.now()}
+    
+    def update(self, key: str, status: int) -> None:
+        with self.lock:
+            self.data[key]['status'] = status
+            self.data[key]['date'] = datetime.now()
+    
+    def get(self, key: str) -> dict:
+        x = None
+        with self.lock:
+            x = self.data[key]
+        return x
+    
+    def get_status(self, key: str) -> int:
+        x = None
+        with self.lock:
+            x = self.data[key]['status']
+        return x
+    
+    def get_date(self, key: str) -> datetime:
+        x = None
+        with self.lock:
+            x = self.data[key]['date']
+        return x
