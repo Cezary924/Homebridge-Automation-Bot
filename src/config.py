@@ -5,10 +5,10 @@ def check_file(path: str) -> bool:
     return os.path.isfile(path)
 
 # create configuration file
-def create_config(path: str, start_time: str, log_length: int) -> None:
+def create_config(path: str) -> None:
     with open(path, 'w') as f:
-        json.dump({"settings": {"ip": "XXX.XXX.XXX.XXX", "port": "XXXX", "login": "XXXXXX", "password": "XXXXXX"}}, f, indent = 4)
-    print_config_info("A config file has been created successfully.", "Please, edit the configuration and run the script again.", start_time, log_length)
+        json.dump({"settings": {"ip": "XXX.XXX.XXX.XXX", "port": "XXXX", "username": "XXXXXX", "password": "XXXXXX"}}, f, indent = 4)
+    log.print_log("A config file has been created successfully.", "Please, edit the configuration and run the script again.")
 
 # load configuartion from file
 def load_config(path: str) -> dict:
@@ -27,5 +27,5 @@ def save_config(path: str, config_dict: dict) -> None:
         json.dump(config_dict, f, indent = 4)
 
 # print info about error during preparing configuration
-def print_err(e: Exception) -> None:
-    log.print_log("An error has occured while loading the config file.", str(e))
+def print_config_err(e: Exception, start_time: str, log_length: int, info: str = "") -> None:
+    print_config_info("An error has occured while loading the config file.", str(e), start_time, log_length, info)
