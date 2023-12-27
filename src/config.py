@@ -11,6 +11,11 @@ def create_config(path: str) -> None:
         json.dump({"settings": {"ip": "XXX.XXX.XXX.XXX", "port": "XXXX", "username": "XXXXXX", "password": "XXXXXX"}}, f, indent = 4)
     log.print_log("A config file has been created successfully.", "Please, edit the configuration and run the script again.")
 
+# save configuartion to file
+def save_config(path: str, config_dict: dict) -> None:
+    with open(path, 'w') as f:
+        json.dump(config_dict, f, indent = 4)
+
 # load configuartion from file
 def load_config(path: str) -> dict:
     with open(path, 'r') as f:
@@ -48,10 +53,11 @@ def load_config(path: str) -> dict:
         raise Exception('')
     return loaded_config
 
-# save configuartion to file
-def save_config(path: str, config_dict: dict) -> None:
-    with open(path, 'w') as f:
-        json.dump(config_dict, f, indent = 4)
+# check correctness of loaded configuration
+def check_correctness(configuration: dict) -> None:
+    #TODO needs implementation
+    #raise Exception
+    pass
 
 # print info about error during preparing configuration
 def print_err(e: Exception) -> None:
