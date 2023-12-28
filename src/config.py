@@ -1,4 +1,5 @@
 import json, os
+
 import log, hb
 
 # check if configuration file exists
@@ -20,44 +21,44 @@ def save_config(path: str, config_dict: dict) -> None:
 def load_config(path: str) -> dict:
     with open(path, 'r') as f:
         loaded_config = json.load(f)
-    if 'settings' not in loaded_config.keys():
-        raise Exception("A 'settings' dict missing in config file.")
-    for element in ['ip', 'port', 'username', 'password']:
-        if element not in loaded_config['settings'].keys():
-            raise Exception("A '" + element + "' missing in 'settings' dict in config file.")
-    if 'accessories' not in loaded_config.keys():
-        try:
-            hb.get_access_token(loaded_config)
-            accessories_layout = hb.get_accessories_layout()
-            hidden_accessories = {}
-            for room in accessories_layout:
-                for service in room['services']:
-                    if 'hidden' in service:
-                        hidden_accessories["uniqueId"] = True
-                    else:
-                        hidden_accessories["uniqueId"] = False
-            accessories = hb.get_accessories()
-            for accessory in accessories:
-                if accessory["uniqueId"] in hidden_accessories:
-                    if hidden_accessories[accessory["uniqueId"]] == True:
-                        del accessory
-                        continue
-                unwanted = set(accessory.keys()) - set(["uniqueId", "serviceName"])
-                for unwanted_key in unwanted:
-                    del accessory[unwanted_key]
-            loaded_config['accessories'] = accessories
-            save_config(path, loaded_config)
-            log.print_log("A config file has been updated with accessories list.", "Please, edit the updated configuration and run the script again.")
-        except Exception as e:
-            raise Exception(str(e))
-        raise Exception('')
     return loaded_config
 
 # check correctness of loaded configuration
-def check_correctness(configuration: dict) -> None:
-    #TODO needs implementation
-    #raise Exception
-    pass
+def check_correctness(configuration: dict, path: str) -> None:
+    if 'settings' not in configuration.keys():
+        raise Exception("A 'settings' dict missing in config file.")
+    for element in ['ip', 'port', 'username', 'password']:
+        if element not in configuration['settings'].keys():
+            raise Exception("A '" + element + "' missing in 'settings' dict in config file.")
+    if 'accessories' not in configuration.keys():
+        try:
+            hb.get_access_token(configuration)
+            accessories = hb.get_accessories()
+            for accessory in accessories:
+                if "values" not in accessory.keys():
+                    del accessory
+                    continue
+                unwanted = set(accessory.keys()) - set(["uniqueId", "serviceName", "type"])
+                characteristics = accessory['values'].keys()
+                for unwanted_key in unwanted:
+                    del accessory[unwanted_key]
+                accessory['characteristics'] = []
+                for value in characteristics:
+                    accessory['characteristics'].append(value)
+            configuration['accessories'] = accessories
+            if 'automations' not in configuration.keys():
+                configuration['automations'] = []
+            save_config(path, configuration)
+            log.print_log("A config file has been updated with accessories list.", "Please, edit the 'automations' section of the updated configuration and run the script again.")
+        except Exception as e:
+            raise Exception(str(e))
+        raise Exception('')
+    if 'automations' not in configuration.keys() or ('automations' in configuration.keys() and len(configuration['automations']) == 0):
+        if 'automations' not in configuration.keys():
+            configuration['automations'] = []
+            save_config(path, configuration)
+        log.print_log("A config file has no automations.", "Please, edit the 'automations' section of the configuration and run the script again.")
+        raise Exception('')
 
 # print info about error during preparing configuration
 def print_err(e: Exception) -> None:
