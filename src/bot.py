@@ -1,5 +1,5 @@
-import os, sys, signal, time, threading
-import log, config
+import os, sys, signal, time, re
+import log, config, database, automations, hb
 
 # get path of directory containing bot script
 dir = os.path.dirname(os.path.realpath(__file__)) + "/"
@@ -23,8 +23,15 @@ except Exception as e:
 
 # starting log message
 log.print_log("", "", 1, version)
+
+# database variable
+accessories_database = None
+
 # handle exit (also with CTRL + C)
 def ctrl_c(signal = None, frame = None) -> None:
+    global accessories_database
+    if accessories_database != None:
+        del accessories_database
     log.print_log("", "", -1)
     sys.exit(0)
 signal.signal(signal.SIGINT, ctrl_c)
@@ -51,15 +58,14 @@ except Exception as e:
     hb.print_err(e)
     ctrl_c()
 
-# stop LoadingString object loop
-loading.stop()
-time.sleep(1)
+# create Database object
+try:
+    accessories_database = database.Database(configuration['accessories'])
+except Exception as e:
+    hb.print_err(e)
+    ctrl_c()
 
-# write stdout to both console and file
-sys.stdout = log.Logger()
-
-# starting log message
-log.print_log("", "", 1)
-
+# get automations list from configuration
+accessories_automations = configuration['automations']
 while True:
     pass
