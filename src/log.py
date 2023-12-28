@@ -40,11 +40,12 @@ class Logger(object):
         pass
 
 # print info about Bot's tasks
-def print_log(info: str, info2: str = "", start_stop: int = 0) -> None:
+def print_log(info: str, info2: str = "", start_stop: int = 0, ver: str = "") -> None:
     if start_stop == 1:
         print("|" + "=" * (log_length - 2) + "|")
         print("|" + "+" * (log_length - 2) + "|")
         print("Homebridge Automation Bot".center(log_length, ' '))
+        print(("v" + ver).center(log_length, ' '))
         print("by Cezary924".center(log_length, ' '))
         print("|" + "+" * (log_length - 2) + "|")
         print("|" + "=" * (log_length - 2) + "|")
@@ -53,7 +54,7 @@ def print_log(info: str, info2: str = "", start_stop: int = 0) -> None:
         print(" " + "The Bot has been started." + " ")
         print("|" + "=" * (log_length - 2) + "|")
         return
-    if start_stop == 2:
+    if start_stop == -1:
         print(str(datetime.datetime.now().strftime(" %Y-%m-%d %H:%M:%S ")))
         print(" " + "-" * (log_length - 2) + " ")
         print(" " + "The Bot has been stopped." + " ")
