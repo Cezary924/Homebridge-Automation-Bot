@@ -54,15 +54,38 @@ def get_accessories() -> list:
 
     return response.json()
 
-# get list of accessories layout
-def get_accessories_layout() -> list:
+# get value of accessory characteristics
+def get_accessory_characteristics(uniqueId: str) -> list:
     global hb_url, headers
 
-    response = requests.get(hb_url + "/api/accessories/layout", headers = headers)
+    response = requests.get(hb_url + "/api/accessories/" + uniqueId, headers = headers)
     if response.status_code < 200 or response.status_code > 299:
-        raise Exception('Could not authorize using the username/password provided.')
+        raise Exception("'" + uniqueId + "' is not a correct ID.")
 
-    return response.json()
+    return response.json()['values']
+
+# get value of defined accessory characteristic
+def get_accessory_characteristic(uniqueId: str, characteristicType: str) -> int:
+    global hb_url, headers
+
+    response = requests.get(hb_url + "/api/accessories/" + uniqueId, headers = headers)
+    if response.status_code < 200 or response.status_code > 299:
+        raise Exception("'" + uniqueId + "' is not a correct ID.")
+    
+    if characteristicType not in response.json()['values']:
+        raise Exception("'" + characteristicType + "' is not a characteristic of this accessory.")
+
+    return response.json()['values'][characteristicType]
+
+# set value of accessory characteristic
+def set_accessory_characteristic(uniqueId: str, characteristicType: str, value: int) -> None:
+    global hb_url, headers
+
+    data = {"characteristicType": characteristicType, "value": value}
+
+    response = requests.put(hb_url + "/api/accessories/" + uniqueId, headers = headers, json = data)
+    if response.status_code < 200 or response.status_code > 299:
+        raise Exception("'" + uniqueId + "' or '" + characteristicType + "' are not correct.")
 
 # print info about error during requesting to Homebridge API
 def print_err(e: Exception) -> None:
