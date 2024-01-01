@@ -1,4 +1,5 @@
 import os, sys, signal, time, re
+
 import log, config, database, automations, hb
 
 # get path of directory containing bot script
@@ -67,5 +68,16 @@ except Exception as e:
 
 # get automations list from configuration
 accessories_automations = configuration['automations']
+
+# main script loop
+timeout = 5
 while True:
-    pass
+    time.sleep(timeout)
+    try:
+        hb.get_access_token(configuration)
+        for automation in accessories_automations:
+            accessories_database.update_accessory_value(automation['uniqueId'], automation['characteristic'])
+            getattr(automations, automation['type'])(automation, accessories_database)
+    except Exception as e:
+        hb.print_err(e)
+        continue
