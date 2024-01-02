@@ -2,14 +2,14 @@
 
 ## Current Version
 
-Currently, the latest version of Homebridge Automation Bot is **0.3**.
+Currently, the latest version of Homebridge Automation Bot is **1.0**.
 An information about the newest update can be found in the Releases section.
 
 ## Supported Versions
 
 | Version | Support status |
 | :-: | :-: |
-| _0.3_ | :white_check_mark: |
+| _1.0_ | :white_check_mark: |
 | _0.x - 0.x_ | :heavy_check_mark: |
 | _-.- - -.-_ | :x: |
 
