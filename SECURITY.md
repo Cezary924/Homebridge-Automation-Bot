@@ -10,7 +10,7 @@ An information about the newest update can be found in the Releases section.
 | Version | Support status |
 | :-: | :-: |
 | _1.0_ | :white_check_mark: |
-| _0.x - 0.x_ | :heavy_check_mark: |
+| _1.x - 0.x_ | :heavy_check_mark: |
 | _-.- - -.-_ | :x: |
 
 :white_check_mark: - _Fully supported_ - You can expect to get an update on every reported vulnerability/problem.
