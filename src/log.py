@@ -21,7 +21,7 @@ def log_file(name: str, path: str) -> io.TextIOWrapper:
     try:
         x = open(path, 'a')
     except OSError:
-        print("ERROR: Open error - Could not open the \'" + name + ".txt\' file.")
+        print("ERROR: Open error - Could not open the \'" + name + "\' file.")
     return x
 
 # class for logging instances
