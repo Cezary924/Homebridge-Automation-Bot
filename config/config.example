@@ -1,0 +1,37 @@
+{
+    "settings": {
+        "ip": "XXX.XXX.XXX.XXX",
+        "port": "XXXX",
+        "username": "XXXXXXXX",
+        "password": "XXXXXXXX"
+    },
+    "accessories": [
+        {
+            "type": "XXXXXXXX",
+            "serviceName": "XXXXXXXX",
+            "uniqueId": "XXXXXXXX",
+            "characteristics": [
+                "XXXXXXXX"
+            ]
+        }
+    ],
+    "automations": [
+        {
+            "uniqueId": "XXXXXXXX",
+            "characteristic": "XXXXXXXX",
+            "type": "timer",
+            "data": {
+                "period": "XXXX"
+            }
+        },
+        {
+            "uniqueId": "XXXXXXXX",
+            "characteristic": "XXXXXXXX",
+            "type": "scheduler",
+            "data": {
+                "startTime": "XX:XX",
+                "stopTime": "XX:XX"
+            }
+        }
+    ]
+}
