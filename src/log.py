@@ -1,4 +1,4 @@
-import sys, io, datetime, threading
+import sys, os, io, datetime, threading
 
 # get start date & time
 start_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -19,9 +19,10 @@ def synchronized_with_attr(lock_name: str):
 # write and open log file 'name' located in 'path'
 def log_file(name: str, path: str) -> io.TextIOWrapper:
     try:
+        os.makedirs(os.path.dirname(path), exist_ok = True)
         x = open(path, 'a')
     except OSError:
-        print("ERROR: Open error - Could not open the \'" + name + ".txt\' file.")
+        print("ERROR: Open error - Could not open the \'" + name + "\' file.")
     return x
 
 # class for logging instances
