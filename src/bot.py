@@ -78,6 +78,16 @@ while True:
         for automation in accessories_automations:
             accessories_database.update_accessory_value(automation['uniqueId'], automation['characteristic'])
             getattr(automations, automation['type'])(automation, accessories_database)
+    except AttributeError as e:
+        hb.print_err("A key '" + str(e).split('\'')[3] + "' is not a correct automation type.")
+        continue
     except Exception as e:
-        hb.print_err(e)
+        if str(e) in ['\'period\'', '\'stopTime\'', '\'startTime\'']:
+            hb.print_err("A key '" + str(e)[1:-1] + "' missing in 'data' dict in a dict in 'automations' list in config file.")
+        elif 'time data' in str(e):
+            hb.print_err("A value '" + str(e).split('\'')[1] + "' does not match time format %H:%M.")
+        elif 'time data' in str(e):
+            hb.print_err("A value '" + str(e).split('\'')[1] + "' does not match time format %S.")
+        else:
+            hb.print_err(e)
         continue
