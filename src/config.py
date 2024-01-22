@@ -47,7 +47,7 @@ def check_correctness(configuration: dict, path: str) -> None:
                     accessory['characteristics'].append(value)
             configuration['accessories'] = accessories
             if 'automations' not in configuration.keys():
-                configuration['automations'] = []
+                configuration['automations'] = [{"uniqueId": "XXXXXXXX", "characteristic": "XXXXXXXX", "type": "timer", "data": {"period": "XXXX"}},{"uniqueId": "XXXXXXXX", "characteristic": "XXXXXXXX", "type": "scheduler", "data": {"startTime": "XX:XX", "stopTime": "XX:XX"}}]
             save_config(path, configuration)
             log.print_log("A config file has been updated with accessories list.", "Please, edit the 'automations' section of the updated configuration and run the script again.")
         except Exception as e:
@@ -59,7 +59,7 @@ def check_correctness(configuration: dict, path: str) -> None:
                 raise Exception("A key '" + element2 + "' missing in a dict in 'accessories' list in config file.")
     if 'automations' not in configuration.keys() or ('automations' in configuration.keys() and len(configuration['automations']) == 0):
         if 'automations' not in configuration.keys():
-            configuration['automations'] = []
+            configuration['automations'] = [{"uniqueId": "XXXXXXXX", "characteristic": "XXXXXXXX", "type": "timer", "data": {"period": "XXXX"}},{"uniqueId": "XXXXXXXX", "characteristic": "XXXXXXXX", "type": "scheduler", "data": {"startTime": "XX:XX", "stopTime": "XX:XX"}}]
             save_config(path, configuration)
         log.print_log("A config file has no automations.", "Please, edit the 'automations' section of the configuration and run the script again.")
         raise Exception('')
