@@ -29,7 +29,7 @@ def check_correctness(configuration: dict, path: str) -> None:
         raise Exception("A 'settings' dict missing in config file.")
     for element in ['ip', 'port', 'username', 'password']:
         if element not in configuration['settings'].keys():
-            raise Exception("A '" + element + "' missing in 'settings' dict in config file.")
+            raise Exception("A key '" + element + "' missing in 'settings' dict in config file.")
     if 'accessories' not in configuration.keys():
         try:
             hb.get_access_token(configuration)
@@ -53,12 +53,20 @@ def check_correctness(configuration: dict, path: str) -> None:
         except Exception as e:
             raise Exception(str(e))
         raise Exception('')
+    for element in configuration["accessories"]:
+        for element2 in ['type', 'serviceName', 'uniqueId', 'characteristics']:
+            if element2 not in element.keys():
+                raise Exception("A key '" + element2 + "' missing in a dict in 'accessories' list in config file.")
     if 'automations' not in configuration.keys() or ('automations' in configuration.keys() and len(configuration['automations']) == 0):
         if 'automations' not in configuration.keys():
             configuration['automations'] = []
             save_config(path, configuration)
         log.print_log("A config file has no automations.", "Please, edit the 'automations' section of the configuration and run the script again.")
         raise Exception('')
+    for element in configuration["automations"]:
+        for element2 in ['type', 'data', 'uniqueId', 'characteristic']:
+            if element2 not in element.keys():
+                raise Exception("A key '" + element2 + "' missing in a dict in 'automations' list in config file.")
 
 # print info about error during preparing configuration
 def print_err(e: Exception) -> None:
