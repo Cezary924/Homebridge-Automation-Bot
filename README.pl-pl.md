@@ -7,8 +7,8 @@
 </div><br/>
 
 ## ✨ Automatyzacje
-- Timer (wyłącz akcesorium Homebridge po danym okresie czasu)
-- Scheduler (włącz/wyłącz akcesorium Homebridge w zależności od pory dnia)
+- Timer (wyłącz akcesorium Homebridge po danym okresie czasu).
+- Scheduler (włącz/wyłącz akcesorium Homebridge w zależności od pory dnia).
 
 ## ⚙️ Instalacja
 1. Sklonuj to repozytorium.
