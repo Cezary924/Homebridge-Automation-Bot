@@ -1,4 +1,4 @@
-import threading, copy
+import threading, copy, os
 from datetime import datetime
 
 import hb
@@ -97,3 +97,10 @@ class Database:
             else:
                 raise Exception("'" + characteristicType + "' is not a characteristic of this accessory.")
             hb.set_accessory_characteristic(key, characteristicType, value)
+
+# check if database file exists
+def check_database_file(path: str = "../config/database") -> bool:
+    return os.path.isfile(path)
+# remove database file
+def remove_database_file(path: str = "../config/database") -> None:
+    os.remove(path)
