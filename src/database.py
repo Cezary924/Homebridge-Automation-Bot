@@ -1,4 +1,5 @@
 import threading, copy, os
+import dill
 from datetime import datetime
 
 import hb
@@ -101,6 +102,16 @@ class Database:
 # check if database file exists
 def check_database_file(path: str = "../config/database") -> bool:
     return os.path.isfile(path)
+
+# save database data to file
+def save_database_to_file(db: Database, path: str = "../config/database") -> None:
+    dill.dump(db, file = open(path, "wb"))
+
+# load database data from file
+def load_database_file(path: str = "../config/database") -> Database:
+    db = dill.load(open(path, "rb"))
+    return db
+
 # remove database file
 def remove_database_file(path: str = "../config/database") -> None:
     os.remove(path)
