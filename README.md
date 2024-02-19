@@ -8,7 +8,7 @@
 
 ## ✨ Automations
 - Timer (to turn off the Homebridge accessory after a specified period of time).
-- Scheduler (to turn on/off the Homebridge accessory depending on the time of the day).
+- Scheduler (to turn on/off the Homebridge accessory depending on the time of the day (+ sunrise/sunset)).
 
 ## ⚙️ Installation
 1. Clone this repo.
