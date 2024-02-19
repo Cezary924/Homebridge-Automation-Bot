@@ -3,7 +3,11 @@
         "ip": "XXX.XXX.XXX.XXX",
         "port": "XXXX",
         "username": "XXXXXXXX",
-        "password": "XXXXXXXX"
+        "password": "XXXXXXXX",
+        "optional": {
+            "latitude": "XX.XX",
+            "longitude": "XX.XX"
+        }
     },
     "accessories": [
         {
