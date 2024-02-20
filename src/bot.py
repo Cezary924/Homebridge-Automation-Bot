@@ -32,6 +32,7 @@ accessories_database = None
 def ctrl_c(signal = None, frame = None) -> None:
     global accessories_database
     if accessories_database != None:
+        database.remove_database_file()
         del accessories_database
     log.print_log("", "", -1)
     sys.exit(0)
@@ -52,6 +53,12 @@ except Exception as e:
         config.print_err(e)
     ctrl_c()
 
+# check if database file exists & load it
+config_file_path = "../config/database"
+if database.check_database_file():
+    accessories_database = database.load_database_file()
+    log.print_log("The database file has been detected and loaded successfully.")
+
 # get Homebridge API access token for the first time
 try:
     hb.get_access_token(configuration)
@@ -60,11 +67,12 @@ except Exception as e:
     ctrl_c()
 
 # create Database object
-try:
-    accessories_database = database.Database(configuration['accessories'])
-except Exception as e:
-    hb.print_err(e)
-    ctrl_c()
+if accessories_database == None:
+    try:
+        accessories_database = database.Database(configuration['accessories'])
+    except Exception as e:
+        hb.print_err(e)
+        ctrl_c()
 
 # get automations list from configuration
 accessories_automations = configuration['automations']
@@ -83,7 +91,6 @@ while True:
             getattr(automations, automation['type'])(automation, accessories_database, settings)
     except AttributeError as e:
         hb.print_err("A key '" + str(e).split('\'')[3] + "' is not a correct automation type.")
-        continue
     except Exception as e:
         if str(e) in ['\'period\'', '\'stopTime\'', '\'startTime\'']:
             hb.print_err("A key '" + str(e)[1:-1] + "' missing in 'data' dict in a dict in 'automations' list in config file.")
@@ -93,4 +100,6 @@ while True:
             hb.print_err("A value '" + str(e).split('\'')[1] + "' does not match time format %S.")
         else:
             hb.print_err(e)
+    finally:
+        database.save_database_to_file(accessories_database)
         continue
