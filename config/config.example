@@ -36,6 +36,15 @@
                 "startTime": "XX:XX",
                 "stopTime": "XX:XX"
             }
+        },
+        {
+            "uniqueId": "XXXXXXXX",
+            "characteristic": "XXXXXXXX",
+            "type": "scheduler",
+            "data": {
+                "startTime": "sunset",
+                "stopTime": "sunrise"
+            }
         }
     ]
 }
