@@ -3,7 +3,11 @@
         "ip": "XXX.XXX.XXX.XXX",
         "port": "XXXX",
         "username": "XXXXXXXX",
-        "password": "XXXXXXXX"
+        "password": "XXXXXXXX",
+        "optional": {
+            "latitude": "XX.XX",
+            "longitude": "XX.XX"
+        }
     },
     "accessories": [
         {
@@ -31,6 +35,15 @@
             "data": {
                 "startTime": "XX:XX",
                 "stopTime": "XX:XX"
+            }
+        },
+        {
+            "uniqueId": "XXXXXXXX",
+            "characteristic": "XXXXXXXX",
+            "type": "scheduler",
+            "data": {
+                "startTime": "sunset",
+                "stopTime": "sunrise"
             }
         }
     ]

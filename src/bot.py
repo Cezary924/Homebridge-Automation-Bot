@@ -77,6 +77,9 @@ if accessories_database == None:
 # get automations list from configuration
 accessories_automations = configuration['automations']
 
+# get settings list from configuration
+settings = configuration['settings']
+
 # main script loop
 timeout = 5
 while True:
@@ -85,7 +88,7 @@ while True:
         hb.get_access_token(configuration)
         for automation in accessories_automations:
             accessories_database.update_accessory_value(automation['uniqueId'], automation['characteristic'])
-            getattr(automations, automation['type'])(automation, accessories_database)
+            getattr(automations, automation['type'])(automation, accessories_database, settings)
     except AttributeError as e:
         hb.print_err("A key '" + str(e).split('\'')[3] + "' is not a correct automation type.")
     except Exception as e:
