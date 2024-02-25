@@ -31,6 +31,16 @@
         {
             "uniqueId": "XXXXXXXX",
             "characteristic": "XXXXXXXX",
+            "type": "timer",
+            "data": {
+                "period": "XXXX",
+                "startTime": "XX:XX",
+                "stopTime": "XX:XX"
+            }
+        },
+        {
+            "uniqueId": "XXXXXXXX",
+            "characteristic": "XXXXXXXX",
             "type": "scheduler",
             "data": {
                 "startTime": "XX:XX",
