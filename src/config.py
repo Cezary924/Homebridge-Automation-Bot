@@ -9,7 +9,7 @@ def check_file(path: str) -> bool:
 # create configuration file
 def create_config(path: str) -> None:
     with open(path, 'w') as f:
-        json.dump({"settings": {"ip": "XXX.XXX.XXX.XXX", "port": "XXXX", "username": "XXXXXX", "password": "XXXXXX", "optional": {"latitude": "XX.XX", "longitude": "XX.XX"}}}, f, indent = 4)
+        json.dump({"settings": {"ip": "XXX.XXX.XXX.XXX", "port": "XXXX", "username": "XXXXXX", "password": "XXXXXX", "sleepTime": "XX", "optional": {"latitude": "XX.XX", "longitude": "XX.XX"}}}, f, indent = 4)
     log.print_log("A config file has been created successfully.", "Please, edit the configuration and run the script again.")
 
 # save configuartion to file
@@ -27,7 +27,7 @@ def load_config(path: str) -> dict:
 def check_correctness(configuration: dict, path: str) -> None:
     if 'settings' not in configuration.keys():
         raise Exception("A 'settings' dict missing in config file.")
-    for element in ['ip', 'port', 'username', 'password']:
+    for element in ['ip', 'port', 'username', 'password', 'sleepTime']:
         if element not in configuration['settings'].keys():
             raise Exception("A key '" + element + "' missing in 'settings' dict in config file.")
     if 'accessories' not in configuration.keys():
