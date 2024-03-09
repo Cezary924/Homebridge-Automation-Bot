@@ -1,4 +1,4 @@
-import os, sys, signal, time, re
+import os, sys, signal, time, re, subprocess
 
 import log, config, database, automations, hb
 
@@ -80,14 +80,29 @@ accessories_automations = configuration['automations']
 # get settings list from configuration
 settings = configuration['settings']
 
-# main script loop
+# get sleep time
 timeout = 5
+if 'sleepTime' in settings:
+    try:
+        timeout = int(settings['sleepTime'])
+    except:
+        pass
+    if timeout < 1:
+        timeout = 1
+
+# main script loop
+ex_it = False
 while True:
+    if ex_it:
+        # restart Homebridge-Automation-Bot
+        #subprocess.Popen([os.path.join(sys.path[0], __file__)[: (0 - len('src/bot.py'))] + 'run.vbs'] + sys.argv[1:], shell=True, creationflags=subprocess.CREATE_NEW_CONSOLE)
+        ctrl_c()
     time.sleep(timeout)
     try:
         hb.get_access_token(configuration)
         for automation in accessories_automations:
-            accessories_database.update_accessory_value(automation['uniqueId'], automation['characteristic'])
+            if 'uniqueId' in automation.keys():
+                accessories_database.update_accessory_value(automation['uniqueId'], automation['characteristic'])
             getattr(automations, automation['type'])(automation, accessories_database, settings)
     except AttributeError as e:
         hb.print_err("A key '" + str(e).split('\'')[3] + "' is not a correct automation type.")
@@ -98,6 +113,8 @@ while True:
             hb.print_err("A value '" + str(e).split('\'')[1] + "' does not match time format %H:%M.")
         elif 'time data' in str(e):
             hb.print_err("A value '" + str(e).split('\'')[1] + "' does not match time format %S.")
+        elif 'Autorestart' == str(e):
+            ex_it = True
         else:
             hb.print_err(e)
     finally:
