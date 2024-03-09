@@ -9,6 +9,7 @@
 ## ✨ Automatyzacje
 - Timer (wyłącz akcesorium Homebridge po danym okresie czasu (+ tylko w określonych godzinach)).
 - Scheduler (włącz/wyłącz akcesorium Homebridge w zależności od pory dnia (+ wschód/zachód Słońca)).
+- Auto-restart (restart instancji Homebridge w zależności od pory dnia czy dnia tygodnia).
 
 ## ⚙️ Instalacja
 1. Sklonuj to repozytorium.
