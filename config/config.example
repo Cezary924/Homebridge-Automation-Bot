@@ -56,6 +56,13 @@
                 "startTime": "sunset",
                 "stopTime": "sunrise"
             }
+        },
+        {
+            "type": "autorestart",
+            "data": {
+                "time": "XX:XX",
+                "weekDay": "Everyday"
+            }
         }
     ]
 }
