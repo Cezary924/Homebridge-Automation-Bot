@@ -98,6 +98,10 @@ class Database:
             else:
                 raise Exception("'" + characteristicType + "' is not a characteristic of this accessory.")
             hb.set_accessory_characteristic(key, characteristicType, value)
+    
+    def restart_homebridge_instance(self) -> None:
+        with self.lock:
+            hb.restart_homebridge_instance()
 
 # check if database file exists
 def check_database_file(path: str = "../config/database") -> bool:
