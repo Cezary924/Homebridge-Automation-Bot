@@ -105,3 +105,30 @@ def scheduler(automation: dict, accessories_database: database.Database, setting
             if accessories_database.get_accessory_value(automation['uniqueId'], automation['characteristic']) == 0:
                 accessories_database.set_accessory_value(automation['uniqueId'], automation['characteristic'], 1)
                 log.print_log('Scheduler', "'" + accessories_database.get_accessory_serviceName(automation['uniqueId']) + "' --- '" + automation['characteristic'] + "' --- 0 -> 1")
+
+# restart Homebridge
+def autorestart(automation: dict, accessories_database: database.Database, settings: dict) -> None:
+    timeObj = datetime.strptime(automation['data']['time'], "%H:%M")
+    timeSec = timeObj.hour * 3600 + timeObj.minute * 60
+    weekDay = automation['data']['weekDay']
+    nowTimeObj = datetime.now()
+    nowTimeSec = nowTimeObj.hour * 3600 + nowTimeObj.minute * 60
+    nowWeekDay = nowTimeObj.weekday()
+    if nowWeekDay == 0:
+        nowWeekDay = "Monday"
+    elif nowWeekDay == 1:
+        nowWeekDay = "Tuesday"
+    elif nowWeekDay == 2:
+        nowWeekDay = "Wednesday"
+    elif nowWeekDay == 3:
+        nowWeekDay = "Thursday"
+    elif nowWeekDay == 4:
+        nowWeekDay = "Friday"
+    elif nowWeekDay == 5:
+        nowWeekDay = "Saturday"
+    else:
+        nowWeekDay = "Sunday"
+    if nowTimeSec - int(settings["sleepTime"]) < timeSec and timeSec < nowTimeSec + int(settings["sleepTime"]) and (weekDay == nowWeekDay or weekDay == "Everyday"):
+        accessories_database.restart_homebridge_instance()
+        log.print_log('The Homebridge instance restart.')
+        raise Exception('Autorestart')
