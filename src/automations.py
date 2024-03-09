@@ -15,9 +15,9 @@ def get_start_stop_time_sec(automation: dict, accessories_database: database.Dat
             log.print_log("A config error has occured.", "No 'latitude' or 'longitude' in a 'optional' dict in a 'settings' dict.")
             return (-1, -1)
         if automation['data']['startTime'] == 'sunrise':
-            startTimeObj = sun.get_sunrise_time()
+            startTimeObj = sun.get_sunrise_time(datetime.now())
         else:
-            startTimeObj = sun.get_sunset_time()
+            startTimeObj = sun.get_sunset_time(datetime.now())
     startTimeSec = startTimeObj.hour * 3600 + startTimeObj.minute * 60
     stopTimeObj = None
     if automation['data']['stopTime'] not in ['sunrise', 'sunset']:
@@ -29,9 +29,9 @@ def get_start_stop_time_sec(automation: dict, accessories_database: database.Dat
             log.print_log("A config error has occured.", "No 'latitude' or 'longitude' in a 'optional' dict in a 'settings' dict.")
             return (-1, -1)
         if automation['data']['stopTime'] == 'sunrise':
-            stopTimeObj = sun.get_sunrise_time()
+            stopTimeObj = sun.get_sunrise_time(datetime.now())
         else:
-            stopTimeObj = sun.get_sunset_time()
+            stopTimeObj = sun.get_sunset_time(datetime.now())
     stopTimeSec = stopTimeObj.hour * 3600 + stopTimeObj.minute * 60
     return (startTimeSec, stopTimeSec)
 
