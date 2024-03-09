@@ -80,6 +80,16 @@ accessories_automations = configuration['automations']
 # get settings list from configuration
 settings = configuration['settings']
 
+# get sleep time
+timeout = 5
+if 'sleepTime' in settings:
+    try:
+        timeout = int(settings['sleepTime'])
+    except:
+        pass
+    if timeout < 1:
+        timeout = 1
+
 # main script loop
 timeout = 5
 while True:
