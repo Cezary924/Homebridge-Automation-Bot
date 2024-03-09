@@ -65,7 +65,7 @@ def check_correctness(configuration: dict, path: str) -> None:
         raise Exception('')
     for element in configuration["automations"]:
         for element2 in ['type', 'data', 'uniqueId', 'characteristic']:
-            if element2 not in element.keys():
+            if element2 not in element.keys() and 'type' in element.keys() and element['type'] != 'autorestart':
                 raise Exception("A key '" + element2 + "' missing in a dict in 'automations' list in config file.")
 
 # print info about error during preparing configuration
