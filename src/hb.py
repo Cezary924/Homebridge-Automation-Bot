@@ -87,6 +87,14 @@ def set_accessory_characteristic(uniqueId: str, characteristicType: str, value: 
     if response.status_code < 200 or response.status_code > 299:
         raise Exception("'" + uniqueId + "' or '" + characteristicType + "' are not correct.")
 
+# restart Homebridge
+def restart_homebridge_instance() -> None:
+    global hb_url, headers
+
+    response = requests.put(hb_url + "/api/server/restart", headers = headers)
+    if response.status_code != 200:
+        raise Exception("'An error has occured while requesting Homebridge restart.")
+
 # print info about error during requesting to Homebridge API
 def print_err(e: Exception) -> None:
     log.print_log("An error has occured while requesting the Homebridge API.", str(e))
