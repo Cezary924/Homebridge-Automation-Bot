@@ -9,7 +9,7 @@ def check_file(path: str) -> bool:
 # create configuration file
 def create_config(path: str) -> None:
     with open(path, 'w') as f:
-        json.dump({"settings": {"ip": "XXX.XXX.XXX.XXX", "port": "XXXX", "username": "XXXXXX", "password": "XXXXXX", "optional": {"latitude": "XX.XX", "longitude": "XX.XX"}}}, f, indent = 4)
+        json.dump({"settings": {"ip": "XXX.XXX.XXX.XXX", "port": "XXXX", "username": "XXXXXX", "password": "XXXXXX", "sleepTime": "XX", "optional": {"latitude": "XX.XX", "longitude": "XX.XX"}}}, f, indent = 4)
     log.print_log("A config file has been created successfully.", "Please, edit the configuration and run the script again.")
 
 # save configuartion to file
@@ -26,10 +26,10 @@ def load_config(path: str) -> dict:
 # check correctness of loaded configuration
 def check_correctness(configuration: dict, path: str) -> None:
     if 'settings' not in configuration.keys():
-        raise Exception("A 'settings' dict missing in config file.")
-    for element in ['ip', 'port', 'username', 'password']:
+        raise Exception("A 'settings' dict missing in the config file.")
+    for element in ['ip', 'port', 'username', 'password', 'sleepTime']:
         if element not in configuration['settings'].keys():
-            raise Exception("A key '" + element + "' missing in 'settings' dict in config file.")
+            raise Exception("A key '" + element + "' missing in the 'settings' dict in the config file.")
     if 'accessories' not in configuration.keys():
         try:
             hb.get_access_token(configuration)
@@ -49,14 +49,14 @@ def check_correctness(configuration: dict, path: str) -> None:
             if 'automations' not in configuration.keys():
                 configuration['automations'] = [{"uniqueId": "XXXXXXXX", "characteristic": "XXXXXXXX", "type": "timer", "data": {"period": "XXXX"}},{"uniqueId": "XXXXXXXX", "characteristic": "XXXXXXXX", "type": "scheduler", "data": {"startTime": "XX:XX", "stopTime": "XX:XX"}}]
             save_config(path, configuration)
-            log.print_log("A config file has been updated with accessories list.", "Please, edit the 'automations' section of the updated configuration and run the script again.")
+            log.print_log("A config file has been updated with an accessories list.", "Please, edit the 'automations' section of the updated configuration and run the script again.")
         except Exception as e:
             raise Exception(str(e))
         raise Exception('')
     for element in configuration["accessories"]:
         for element2 in ['type', 'serviceName', 'uniqueId', 'characteristics']:
             if element2 not in element.keys():
-                raise Exception("A key '" + element2 + "' missing in a dict in 'accessories' list in config file.")
+                raise Exception("A key '" + element2 + "' missing in a dict in the 'accessories' list in the config file.")
     if 'automations' not in configuration.keys() or ('automations' in configuration.keys() and len(configuration['automations']) == 0):
         if 'automations' not in configuration.keys():
             configuration['automations'] = [{"uniqueId": "XXXXXXXX", "characteristic": "XXXXXXXX", "type": "timer", "data": {"period": "XXXX"}},{"uniqueId": "XXXXXXXX", "characteristic": "XXXXXXXX", "type": "scheduler", "data": {"startTime": "XX:XX", "stopTime": "XX:XX"}}]
@@ -65,7 +65,7 @@ def check_correctness(configuration: dict, path: str) -> None:
         raise Exception('')
     for element in configuration["automations"]:
         for element2 in ['type', 'data', 'uniqueId', 'characteristic']:
-            if element2 not in element.keys():
+            if element2 not in element.keys() and 'type' in element.keys() and element['type'] != 'autorestart':
                 raise Exception("A key '" + element2 + "' missing in a dict in 'automations' list in config file.")
 
 # print info about error during preparing configuration

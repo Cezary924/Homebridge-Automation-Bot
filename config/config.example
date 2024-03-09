@@ -4,6 +4,7 @@
         "port": "XXXX",
         "username": "XXXXXXXX",
         "password": "XXXXXXXX",
+        "sleepTime": "XX",
         "optional": {
             "latitude": "XX.XX",
             "longitude": "XX.XX"
@@ -54,6 +55,13 @@
             "data": {
                 "startTime": "sunset",
                 "stopTime": "sunrise"
+            }
+        },
+        {
+            "type": "autorestart",
+            "data": {
+                "time": "XX:XX",
+                "weekDay": "Everyday"
             }
         }
     ]
