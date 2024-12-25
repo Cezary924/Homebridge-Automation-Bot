@@ -104,18 +104,18 @@ class Database:
             hb.restart_homebridge_instance()
 
 # check if database file exists
-def check_database_file(path: str = "../config/database") -> bool:
+def check_database_file(path: str = "../db/database") -> bool:
     return os.path.isfile(path)
 
 # save database data to file
-def save_database_to_file(db: Database, path: str = "../config/database") -> None:
+def save_database_to_file(db: Database, path: str = "../db/database") -> None:
     dill.dump(db, file = open(path, "wb"))
 
 # load database data from file
-def load_database_file(path: str = "../config/database") -> Database:
+def load_database_file(path: str = "../db/database") -> Database:
     db = dill.load(open(path, "rb"))
     return db
 
 # remove database file
-def remove_database_file(path: str = "../config/database") -> None:
+def remove_database_file(path: str = "../db/database") -> None:
     os.remove(path)

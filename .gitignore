@@ -1,4 +1,5 @@
 # Ignore secret files containing tokens, keys, etc.
-/src/__pycache__/
-/log/*.log
 /config/*.ini
+/db/*.db
+/log/*.log
+/src/__pycache__/
